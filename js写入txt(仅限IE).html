@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		var fso,tf;
+		fso = new ActiveXObject("Scripting.FileSystemObject");
+		tf = fso.CreateTextFile("d:\\test.txt",true);
+		tf.WriteLine("Testing 1,2,3.");
+		tf.writeBlankLines(3);
+		tf.Write("This is a test.");
+		tf.Close();
+		alert("文件写入成功！");
+	</script>
+</html>

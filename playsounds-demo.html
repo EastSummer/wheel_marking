@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	
+	<style></style>
+
+	<body>
+		<textarea cols="20" rows="10" id="biao1">用户定义的代码区域</textarea>
+		<input type="button" onClick="copyUrl2()" value="点击复制代码" />
+		
+		<button class="music-btn">播放音乐</button>
+		<audio id="audio" src="http://fjdx.sc.chinaz.com/Files/DownLoad/sound1/201707/8906.mp3"></audio>
+		<!--<audio id="audio" src="http://fjdx.sc.chinaz.com/Files/DownLoad/sound1/201706/8855.mp3"></audio>-->
+	</body>
+		
+	<script type="text/javascript">
+		function copyUrl2() {
+			var Url2 = document.getElementById("biao1");
+			Url2.select(); // 选择对象
+			document.execCommand("Copy"); // 执行浏览器复制命令
+			alert("已复制好，可贴粘。");
+		}
+		
+		document.querySelector(".music-btn").addEventListener("click",function(e){
+			e.preventDefault();
+			var auto = document.querySelector("#audio");
+			if(auto.paused){
+				auto.play();
+			}else{
+				auto.pause();
+			}
+		},false);
+	</script>
+	
+</html>

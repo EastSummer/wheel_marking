@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+	<style>
+		#chartdiv {
+		  width: 100%;
+		  height: 500px;
+		}
+	</style>
+	<body>
+		<div id="chartdiv"></div>
+	</body>
+	<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+	<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+	<script src="https://www.amcharts.com/lib/3/amstock.js"></script>
+	<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+	<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+	<script>
+		var chartData1 = [];
+		var chartData2 = [];
+		var chartData3 = [];
+		var chartData4 = [];
+		
+		generateChartData();
+		
+		function generateChartData() {
+			var firstDate = new Date();
+			firstDate.setDate(firstDate.getDate() - 500);
+			firstDate.setHours(0, 0, 0, 0);
+		
+			for(var i = 0; i < 500; i++) {
+				var newDate = new Date(firstDate);
+				newDate.setDate(newDate.getDate() + i);
+		
+				var a1 = Math.round(Math.random() * (40 + i)) + 100 + i;
+				var b1 = Math.round(Math.random() * (1000 + i)) + 500 + i * 2;
+		
+				var a2 = Math.round(Math.random() * (100 + i)) + 200 + i;
+				var b2 = Math.round(Math.random() * (1000 + i)) + 600 + i * 2;
+		
+				var a3 = Math.round(Math.random() * (100 + i)) + 200;
+				var b3 = Math.round(Math.random() * (1000 + i)) + 600 + i * 2;
+		
+				var a4 = Math.round(Math.random() * (100 + i)) + 200 + i;
+				var b4 = Math.round(Math.random() * (100 + i)) + 600 + i;
+		
+				chartData1.push({
+					"date": newDate,
+					"value": a1,
+					// "volume": b1
+				});
+				chartData2.push({
+					"date": newDate,
+					"value": a2,
+					// "volume": b2
+				});
+				chartData3.push({
+					"date": newDate,
+					"value": a3,
+					// "volume": b3
+				});
+				chartData4.push({
+					"date": newDate,
+					"value": a4,
+					// "volume": b4
+				});
+			}
+		}
+
+		var chart = AmCharts.makeChart("chartdiv", {
+			"type": "stock",
+			"theme": "light",
+			"dataSets": [{
+				"title": "first data set",
+				"fieldMappings": [{
+					"fromField": "value",
+					"toField": "value"
+				}],
+				"color": "#fe900d",
+				"dataProvider": chartData1,
+				"categoryField": "date"
+			}, {
+				"title": "second data set",
+				"fieldMappings": [{
+					"fromField": "value",
+					"toField": "value"
+				}],
+				"compared": true,
+				"color": "#43adff",
+				"dataProvider": chartData2,
+				"categoryField": "date"
+			}, {
+				"title": "third data set",
+				"fieldMappings": [{
+					"fromField": "value",
+					"toField": "value"
+				}],
+				"compared": true,
+				"color": "#ff0000",
+				"dataProvider": chartData3,
+				"categoryField": "date"
+			}, {
+				"title": "fourth data set",
+				"fieldMappings": [{
+					"fromField": "value",
+					"toField": "value"
+				}],
+				"compared": true,
+				"color": "#215245",
+				"dataProvider": chartData4,
+				"categoryField": "date"
+			}],
+			//"color": "#fff",
+
+			"dataDateFormat": "YYYY-MM-DD",
+
+			"panels": [{
+					"title": "Value",
+					"percentHeight": 70,
+
+					"stockGraphs": [{
+						"valueField": "value",
+						"comparable": true,
+						"compareField": "value",
+						"balloonText": "[[title]]:<b>[[value]]</b>",
+						"compareGraphBalloonText": "[[title]]:<b>[[value]]</b>"
+					}],
+
+					"stockLegend": {
+						"markerType": "line",
+						// "periodValueTextComparing": "[[percents.value.close]]%",
+						// "periodValueTextRegular": "[[value.close]]"
+					}
+
+				},
+
+			],
+
+			"panelsSettings": {
+				//    "color": "#fff",
+				"plotAreaFillColors": "#333",
+				"plotAreaFillAlphas": 1,
+				"marginLeft": 60,
+				"marginTop": 5,
+				"marginBottom": 5
+			},
+
+			"chartScrollbarSettings": {
+				"graph": "g1",
+				"graphType": "line",
+				"usePeriod": "WW",
+				"backgroundColor": "#333",
+				"graphFillColor": "#666",
+				"graphFillAlpha": 0.5,
+				"gridColor": "#555",
+				"gridAlpha": 1,
+				"selectedBackgroundColor": "#444",
+				"selectedGraphFillAlpha": 1
+			},
+
+			"categoryAxesSettings": {
+				"equalSpacing": true,
+				"gridColor": "#555",
+				"gridAlpha": 1
+			},
+
+			"valueAxesSettings": {
+				"gridColor": "#555",
+				"gridAlpha": 1,
+				"inside": false,
+				"showLastLabel": true
+			},
+
+			"chartCursorSettings": {
+				"pan": true,
+				"valueLineEnabled": true,
+				"valueLineBalloonEnabled": true,
+				"valueBalloonsEnabled": true,
+
+			},
+
+			"legendSettings": {
+				//"color": "#fff"
+			},
+
+			"stockEventsSettings": {
+				"showAt": "high",
+				"type": "pin"
+			},
+
+			"balloon": {
+				"textAlign": "left",
+				"offsetY": 10
+			}
+
+//			"periodSelector": {
+//				"position": "bottom",
+//				"periods": [{
+//						"period": "DD",
+//						"count": 10,
+//						"label": "10D"
+//					}, {
+//						"period": "MM",
+//						"count": 1,
+//						"label": "1M"
+//					}, {
+//						"period": "MM",
+//						"count": 6,
+//						"label": "6M"
+//					}, {
+//						"period": "YYYY",
+//						"count": 1,
+//						"label": "1Y"
+//					}, {
+//						"period": "YYYY",
+//						"count": 2,
+//						"selected": true,
+//						"label": "2Y"
+//					},
+//					/* {
+//					     "period": "YTD",
+//					     "label": "YTD"
+//					   },*/
+//					{
+//						"period": "MAX",
+//						"label": "MAX"
+//					}
+//				]
+//			}
+		});
+	</script>
+</html>

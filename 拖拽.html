@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<style>
+		html,body {
+			height: 100%;
+			position: relative;
+			padding: 0;
+			margin: 0;
+		}
+		#div1 {
+			height: 100px;
+			width: 100px;
+			background: #66ccff;
+			position: absolute;
+		}
+	</style>
+	<body>
+		<div id="div1"></div>
+	</body>
+	<script>
+		window.onload = function() {  
+			new Drag("div1");
+		}
+		
+		//属性与方法的一部分在构造函数中申明，方法另一部分在原型对象中申明
+		function Drag(id) {  
+			var _this = this;  
+			this.oDiv = document.getElementById(id);  
+			this.disX = 0;  
+			this.disY = 0;  
+			this.oDiv.onmousedown = function(ev) {    
+				_this.fnDown(ev);    
+				return false;  
+			};
+		}  
+		Drag.prototype.fnDown = function(ev)   {    
+			var _this = this;    
+			var oEvent = ev || event;    
+			this.disX = oEvent.clientX - this.oDiv.offsetLeft;    
+			this.disY = oEvent.clientY - this.oDiv.offsetTop;    
+			document.onmousemove = function(ev) {      
+				_this.fnMove(ev);    
+			};    
+			document.onmouseup = function() {      
+				_this.fnUp();    
+			};  
+		};  
+		Drag.prototype.fnMove = function(ev)   {    
+			var oEvent = ev || event;    
+			var l = oEvent.clientX - this.disX;    
+			var t = oEvent.clientY - this.disY;    
+			if(l < 0)     {      
+				l = 0;    
+			}    
+			else if(l > document.documentElement.clientWidth - this.oDiv.offsetWidth)     {      
+				l = document.documentElement.clientWidth - this.oDiv.offsetWidth;    
+			}    
+			if(t < 0)     {      
+				t = 0;    
+			}    
+			else if(t > document.documentElement.clientHeight - this.oDiv.offsetHeight)     {      
+				t = document.documentElement.clientHeight - this.oDiv.offsetHeight;    
+			}    
+			this.oDiv.style.left = l + 'px';    
+			this.oDiv.style.top = t + 'px';  
+		};  
+		Drag.prototype.fnUp = function()   {    
+			document.onmousemove = null;    
+			document.onmouseup = null;  
+		};
+		
+    	//将属性包装入构造函数中
+//      function Drag(id){
+//          this.oDiv=document.getElementById(id);
+//          var _this=this;
+//          this.x=0;
+//          this.y=0;
+//          this.oDiv.onmousedown=function(e){
+//              var e=e||event;
+//              _this.x=e.pageX-_this.oDiv.offsetLeft;
+//              _this.y=e.pageY-_this.oDiv.offsetTop;
+//
+//              document.onmousemove=function(e){
+//                  var e=e||event;
+//                  _this.oDiv.style.left=e.pageX-_this.x+"px";
+//                  _this.oDiv.style.top=e.pageY-_this.y+"px";
+//              }
+//              document.onmouseup=function(e){
+//                  var e=e||event;
+//                  document.onmousemove=null;
+//                  document.onmouseup=null;
+//              }
+//              return false;
+//           }
+//      }
+		
+	</script>
+</html>

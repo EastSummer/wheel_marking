@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<link type="text/css" rel="stylesheet" href="css/avalon-ui.css" />
+	<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css" />
+	<style>
+		.edit-value {
+			max-height: 120px;
+		    line-height: 20px;
+			overflow-y: auto;
+			vertical-align: bottom;
+			max-width: 85%;
+			word-wrap: break-word;
+		    word-break: break-all;
+		    font-size: 16px;
+		}
+		
+		.edit-value table {
+			width: 100%;
+		}
+		
+		.edit-value tr .tdBtn {
+			width: 85px;
+		}
+		
+		.edit-value td button {
+			width: 30% !important;
+		}
+		
+		.edit-btn, .editA-btn {
+			margin-right: 5%;
+		}
+		
+		.editT-btn {
+			margin: 0 13%;
+		}
+		
+		.edit-value textarea {
+			width: 99%;
+			height: 100%;
+			font-size: 16px;
+		}
+	</style>
+	<body>
+		<h1>test</h1>
+		<div class="edit-box">	
+			<button class="edit-submit ss-btn ss-btn-info" disabled="disabled">submit</button>
+			<button class="edit-cancle ss-btn ss-btn-info" disabled="disabled">cancle</button>
+		</div>
+		<div class="edit-value">
+			<table class="ss-table">
+				<tbody class="edit-tbody ss-table-body"></tbody>
+			</table>
+		</div>
+		
+	</body>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script>
+		var value = "# queues\n\napplication.bondBizProcessor.mysql.connection=jdbc:mysql://mysql-cdh.dev.sumscope.com:3306/cdh_database?useUnicode=true&characterEncoding=utf-8&autoReconnect=true\napplication.bondBizProcessor.mysql.username=artogrid\napplication.bondBizProcessor.mysql.password=artogrid\napplication.bondBizProcessor.mysql.batchUpdateInterval=2000\napplication.bondBizProcessor.mysql.bondQuoteTable=bond_quote_v2_today\napplication.bondBizProcessor.mysql.bondTradeTable=bond_trade_v2_today\napplication.bondBizProcessor.mysql.bondBboTable=bond_best_bid_offer_v2_today";
+		
+		var tdTemplateHtml = "<button class='edit-btn ss-btn ss-btn-info fa fa-pencil-square-o'></button><button class='editA-btn ss-btn ss-btn-info fa fa-plus'></button><button class='editR-btn ss-btn ss-btn-info fa fa-times'></button>";
+		var tempTrVal1 = "";
+		var tempTrVal2 = "";
+		
+		function editTableHtml(value){
+			$(".edit-tbody").html("");
+			var tempArr = value.split("\n");
+			for(var i in tempArr){
+				var index = tempArr[i].indexOf("=");
+				var len = tempArr[i].length;
+				if(index != -1){
+					var tr = "<tr class='content'><td>"+ tempArr[i].substring(0,index) +"</td><td>"+ tempArr[i].substring(index+1,len) +"</td><td class='tdBtn'>"+ tdTemplateHtml+ "</td></tr>";
+				}else{
+					var tr = "<tr class='content'><td>"+ tempArr[i] +"</td><td></td><td class='tdBtn'>"+ tdTemplateHtml+ "</td></tr>";
+				}
+				$(".edit-tbody").append(tr)
+			}
+		}
+		
+		function btnDisabled(flag){
+			$(".edit-btn").each(function(){
+				flag ? $(this).attr("disabled","disabled") : $(this).removeAttr("disabled");
+			})
+			$(".editA-btn").each(function(){
+				flag ? $(this).attr("disabled","disabled") : $(this).removeAttr("disabled");
+			})
+			$(".editR-btn").each(function(){
+				flag ? $(this).attr("disabled","disabled") : $(this).removeAttr("disabled");
+			})
+		}
+		
+		//edit
+		$(".edit-tbody").on("click",".edit-btn",function(){
+			btnDisabled(true);
+			tempTrVal1 = $(this).parent().prev().prev().text();
+			tempTrVal2 = $(this).parent().prev().text();
+			$(this).parent().prev().prev().html("<textarea>"+ tempTrVal1 +"</textarea>");
+			$(this).parent().prev().html("<textarea>"+ tempTrVal2 +"</textarea>");
+			$(this).parent().html("<button class='editT-btn ss-btn ss-btn-info fa fa-check'></button><button class='editF-btn ss-btn ss-btn-info fa fa-times'></button>");
+			$(".edit-box button").attr("disabled","disabled");
+		})
+		
+		$(".edit-tbody").on("click",".editT-btn",function(){
+			btnDisabled(false);
+			var val1 = $(this).parent().prev().prev().find("textarea").val();
+			var val2 = $(this).parent().prev().find("textarea").val();
+			$(this).parent().prev().prev().text(val1);
+			$(this).parent().prev().text(val2);
+			$(this).parent().html( tdTemplateHtml );
+			$(".edit-box button").removeAttr("disabled");
+		})
+		
+		$(".edit-tbody").on("click",".editF-btn",function(){
+			btnDisabled(false);
+			$(this).parent().prev().prev().text(tempTrVal1);
+			$(this).parent().prev().text(tempTrVal2);
+			$(this).parent().html( tdTemplateHtml );
+			$(".edit-box button").removeAttr("disabled");
+		})
+		
+		//add
+		$(".edit-tbody").on("click",".editA-btn",function(){
+			var tr = "<tr class='content'><td></td><td></td><td class='tdBtn'>"+ tdTemplateHtml +"</td></tr>";
+			$(this).parent().parent().after(tr);
+			$(".edit-box button").removeAttr("disabled");
+		})
+		
+		//remove
+		$(".edit-tbody").on("click",".editR-btn",function(){
+			$(this).parent().parent().remove();
+			$(".edit-box button").removeAttr("disabled");
+		})
+		
+		//submit
+		$(".edit-submit").click(function(){
+			var temp = "";
+			var len = $(".content").length-1;
+			var submitMark = true;
+			$(".content").each(function(index){
+				var val1 = $(this).find("td").eq(0).text();
+				var val2 = $(this).find("td").eq(1).text();
+				var val1Mark = val1.replace(/\s+/g,"").length;
+				var val2Mark = val2.replace(/\s+/g,"").length;
+				if(val1Mark==0 && val2Mark!=0){
+					alert("key值不能为空");
+					submitMark = false;
+					return false
+				}else if(val1Mark!=0 && val2Mark!=0){
+					index==len ? (temp += val1+"="+val2) : (temp += val1+"="+val2+"\n");
+				}else{
+					index==len ? (temp += val1+val2) : (temp += val1+val2+"\n");
+				}
+			})
+			if(submitMark){
+				debugger
+				$(".edit-box button").attr("disabled","disabled");
+			}
+		})
+		
+		//cancle
+		$(".edit-cancle").click(function(){
+			editTableHtml(value);
+			$(".edit-box button").attr("disabled","disabled");
+		})
+		
+		editTableHtml(value);
+		
+	</script>
+</html>

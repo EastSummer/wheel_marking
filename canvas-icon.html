@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>icon</title>
+    <style>
+        body{
+            background:#ccc;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas"></canvas>
+    <script>
+        //获取canvas元素
+        var canvas=document.querySelector("#myCanvas");
+        canvas.width=20;
+        canvas.height=20;
+
+        var ctx=canvas.getContext("2d");
+
+        ctx.save();
+        ctx.translate(0,0);
+        ctx.beginPath();
+
+        // ctx.strokeStyle="#FF0000";
+        // ctx.strokeRect(0,0,20,20);
+        
+        ctx.fillStyle="#ff9200"
+        ctx.fillRect(2,5,1,15)
+        ctx.fillRect(5,10,1,10)
+        ctx.fillRect(8,15,1,5)
+        
+        ctx.fillStyle="#58b3ff"
+        ctx.fillRect(17,5,1,15)
+        ctx.fillRect(14,10,1,10)
+        ctx.fillRect(11,15,1,5)
+    
+        ctx.restore();
+    </script>
+</body>
+</html>
